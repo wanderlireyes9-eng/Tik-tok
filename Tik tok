@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recolector de Información (Educativo)</title>
+  <meta charset="UTF-8" />
+</head>
+<body>
+  <h1>Información del dispositivo</h1>
+  <p>Esta página muestra datos del navegador y la IP pública (con consentimiento).</p>
+  <pre id="info">Cargando información...</pre>
+
+  <script>
+    const info = {
+      userAgent: navigator.userAgent,
+      plataforma: navigator.platform,
+      idioma: navigator.language,
+      resolucionPantalla: `${screen.width} x ${screen.height}`,
+      zonaHoraria: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      ipPublica: "Cargando...",
+    };
+
+    document.getElementById("info").innerText = JSON.stringify(info, null, 2);
+
+    fetch('https://api.ipify.org?format=json')
+      .then(res => res.json())
+      .then(data => {
+        info.ipPublica = data.ip;
+        document.getElementById("info").innerText = JSON.stringify(info, null, 2);
+      })
+      .catch(() => {
+        info.ipPublica = "No se pudo obtener la IP pública.";
+        document.getElementById("info").innerText = JSON.stringify(info, null, 2);
+      });
+  </script>
+</body>
+</html>
