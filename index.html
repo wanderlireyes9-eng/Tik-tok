@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recolección de Información</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    pre {
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Información del dispositivo</h1>
+  <pre id="info">Cargando...</pre>
+
+  <script>
+    async function getIP() {
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        return data.ip;
+      } catch (e) {
+        return "No se pudo obtener";
+      }
+    }
+
+    async function mostrarInfo() {
+      const ip = await getIP();
+      const info = {
+        Navegador: navigator.userAgent,
+        Plataforma: navigator.platform,
+        Idioma: navigator.language,
+        Resolución: `${screen.width}x${screen.height}`,
+        ZonaHoraria: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        IP: ip
+      };
+      document.getElementById("info").textContent = JSON.stringify(info, null, 2);
+    }
+
+    mostrarInfo();
+  </script>
+</body>
+</html>
